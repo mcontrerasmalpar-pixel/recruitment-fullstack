@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Recruitment Backend - Simple Deployment'
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: python3.11
+    Environment:
+      Variables:
+        CORS_ORIGIN: 'https://main.d17tz6njrlkc17.amplifyapp.com'
+        POWERTOOLS_SERVICE_NAME: recruitment-backend
+        LOG_LEVEL: INFO
+
+Resources:
+  RecruitmentApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'https://main.d17tz6njrlkc17.amplifyapp.com'"
+
+  RecruitmentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: recruitment-backend-prod
+      CodeUri: ./
+      Handler: lambda_function.lambda_handler
+      Description: Recruitment Management System API
+      Events:
+        GetCampanias:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/campanias/activas
+            Method: GET
+        PostCampanias:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/campanias
+            Method: POST
+        GetPuestos:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/puestos/activos
+            Method: GET
+        PostPuestos:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/puestos
+            Method: POST
+        GetRequerimientos:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/requerimientos/{campania_id}
+            Method: GET
+        PostRequerimientos:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/requerimientos
+            Method: POST
+        GetPostulaciones:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/postulaciones/{requerimiento_id}
+            Method: GET
+        PostPostulaciones:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/postulaciones
+            Method: POST
+        PutPostulaciones:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /v1/postulaciones/{postulacion_id}/estado
+            Method: PUT
+        OptionsAll:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RecruitmentApi
+            Path: /{proxy+}
+            Method: OPTIONS
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: recruitment-lambda-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${RecruitmentApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  ApiV1Url:
+    Description: "API V1 Base URL"
+    Value: !Sub "https://${RecruitmentApi}.execute-api.${AWS::Region}.amazonaws.com/prod/v1"
