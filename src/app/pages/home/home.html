@@ -18,6 +18,10 @@
           <label>Contraseña</label>
           <input type="password" placeholder="Ingresa tu contraseña" [(ngModel)]="password">
 
+          <div *ngIf="loginError" class="field-error" style="margin-top: 8px;">
+            Usuario o contraseña incorrectos.
+          </div>
+
           <button (click)="login()" [disabled]="!username.trim() || !password.trim()">Iniciar Sesión</button>
         </div>
 
