@@ -1,0 +1,26 @@
+version: 1
+
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: dist/browser
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+
+backend:
+  phases:
+    build:
+      commands:
+        - cd backend/infrastructure
+        - sam build
+        - sam package --s3-bucket $S3_BUCKET --output-template-file packaged.yaml
+        - sam deploy --template-file packaged.yaml --stack-name recruitment-backend-prod --parameter-overrides DbHost=$DB_HOST DbName=$DB_NAME DbUser=$DB_USER DbPassword=$DB_PASSWORD VpcId=$VPC_ID PrivateSubnet1=$PRIVATE_SUBNET_1 PrivateSubnet2=$PRIVATE_SUBNET_2 LambdaSecurityGroup=$LAMBDA_SECURITY_GROUP CorsOrigin=$CORS_ORIGIN ApiStageName=prod AlertEmail=$ALERT_EMAIL --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND

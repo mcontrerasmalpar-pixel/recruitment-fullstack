@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+dist/
+build/
+.angular/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# AWS SAM
+.aws-sam/
+samconfig.toml
+packaged.yaml
+
+# Testing
+coverage/
+.nyc_output/
+
+# Environment files (keep encrypted versions only)
+.env.local
+.env.*.local
+
+# OS
+Thumbs.db
+.DS_Store
