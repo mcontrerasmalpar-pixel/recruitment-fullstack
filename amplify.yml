@@ -15,14 +15,3 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
-
-backend:
-  phases:
-    build:
-      commands:
-        - echo "Building and deploying backend..."
-        - cd backend/infrastructure
-        - sam build
-        - sam package --s3-bucket $AMPLIFY_BUCKET --output-template-file packaged.yaml
-        - sam deploy --template-file packaged.yaml --stack-name recruitment-backend-$AMPLIFY_ENV --s3-prefix recruitment-backend-$AMPLIFY_ENV --region $AWS_REGION --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --no-confirm-changeset --parameter-overrides DbHost=localhost DbName=callcenter DbUser=admin DbPassword=password123 VpcId=default LambdaSecurityGroup=default CorsOrigin=$FRONTEND_URL ApiStageName=$AMPLIFY_ENV AlertEmail=mcontrerasmalpar@gmail.com || echo "Backend deployment note: VPC parameters may need manual configuration"
-        - echo "Backend deployment completed"
