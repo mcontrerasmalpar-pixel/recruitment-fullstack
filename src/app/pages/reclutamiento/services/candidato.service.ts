@@ -13,7 +13,7 @@ import { ReclutamientoValidadorService } from './reclutamiento-validador.service
   providedIn: 'root'
 })
 export class CandidatoService {
-  private apiUrl = 'http://localhost:3000/api/candidatos'; // Ajusta según tu backend
+  private apiUrl = '/api/candidatos';
 
   private candidatosSubject = new BehaviorSubject<Candidato[]>([]);
   public candidatos$ = this.candidatosSubject.asObservable();
