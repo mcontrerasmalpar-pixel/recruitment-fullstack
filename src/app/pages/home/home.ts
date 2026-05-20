@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -23,12 +24,16 @@ export class Home {
   confirmPassword = '';
   verificationCode = '';
 
-  constructor(private router: Router) {}
+  loginError = false;
+
+  constructor(private router: Router, private auth: AuthService) {}
 
   login() {
-    if (this.username.trim() && this.password.trim()) {
-      // Simular login exitoso
-      this.router.navigate(['/planeamiento']);
+    this.loginError = false;
+    if (this.auth.login(this.username, this.password)) {
+      this.router.navigate([this.auth.getHomeRoute()]);
+    } else {
+      this.loginError = true;
     }
   }
 

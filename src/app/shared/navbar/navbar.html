@@ -15,8 +15,11 @@
       </span>
     </button>
   </div>
+
   <div class="navbar-menu">
-    <a routerLink="/planeamiento" routerLinkActive="active" class="navbar-link">
+    <!-- Planeamiento: visible para admin y planeamiento -->
+    <a *ngIf="auth.canAccess('planeamiento')"
+       routerLink="/planeamiento" routerLinkActive="active" class="navbar-link">
       <span class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -25,7 +28,10 @@
       </span>
       <span class="label">Planeamiento</span>
     </a>
-    <a routerLink="/reclutamiento" routerLinkActive="active" class="navbar-link">
+
+    <!-- Reclutamiento: visible para admin y reclutamiento -->
+    <a *ngIf="auth.canAccess('reclutamiento')"
+       routerLink="/reclutamiento" routerLinkActive="active" class="navbar-link">
       <span class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M8 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM16 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -34,7 +40,10 @@
       </span>
       <span class="label">Reclutamiento</span>
     </a>
-    <a routerLink="/formacion" routerLinkActive="active" class="navbar-link">
+
+    <!-- Formación: visible para admin y formacion -->
+    <a *ngIf="auth.canAccess('formacion')"
+       routerLink="/formacion" routerLinkActive="active" class="navbar-link">
       <span class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M12 3 2 8l10 5 10-5-10-5z" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -44,9 +53,10 @@
       <span class="label">Formación</span>
     </a>
   </div>
+
   <div class="navbar-user">
-    <div class="user-info">María Torres</div>
-    <div class="user-role">Planeamiento</div>
+    <div class="user-info">{{ userName }}</div>
+    <div class="user-role">{{ userRole }}</div>
     <button class="navbar-button" type="button" (click)="reportIssue()">
       <span class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
