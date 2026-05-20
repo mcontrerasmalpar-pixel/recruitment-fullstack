@@ -9,7 +9,7 @@ frontend:
       commands:
         - npm run build
   artifacts:
-    baseDirectory: dist/callcenter-app
+    baseDirectory: dist/callcenter-app/browser
     files:
       - '**/*'
   cache:
